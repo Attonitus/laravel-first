@@ -16,10 +16,20 @@ class CardSeeder extends Seeder
     {
         $card_listings = include database_path('seeders/data/card_listings.php');
 
-        $usersId = User::pluck('id')->toArray();
+        //Test user
 
-        foreach ($card_listings as &$listing) {
-            $listing['user_id'] = $usersId[array_rand($usersId)];
+        $testUserId = User::where('email', 'test@test.com')->value('id');
+
+        //other users
+        $usersId = User::where('email', '!=', 'test@test.com')->pluck('id')->toArray();
+
+        foreach ($card_listings as $index => &$listing) {
+            if ($index < 2) {
+                // assign first two user to test
+                $listing['user_id'] = $testUserId;
+            } else {
+                $listing['user_id'] = $usersId[array_rand($usersId)];
+            }
 
             $listing['created_at'] = now();
             $listing['updated_at'] = now();

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use Error;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class CardController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -49,8 +52,9 @@ class CardController extends Controller
             "country" => 'required | string',
             'card_img' => 'required| image | mimes:jpeg,jpg,png,gif | max:2048'
         ]);
+        $user_data = Auth::user();
 
-        $validatedData['user_id'] = 70;
+        $validatedData['user_id'] = $user_data->id;
 
         if ($request->hasFile('card_img')) {
             $path = $request->file('card_img')->store('cards', 'public');
@@ -88,6 +92,7 @@ class CardController extends Controller
      */
     public function edit(Card $card): View
     {
+        $this->authorize('update', $card);
         return view('cards.edit')->with('card', $card);
     }
 
@@ -96,6 +101,8 @@ class CardController extends Controller
      */
     public function update(Request $request, Card $card): RedirectResponse
     {
+        $this->authorize('update', $card);
+
         $validatedData = $request->validate([
             "name" => 'required | string | max:255',
             "description" => 'required | string',
@@ -109,7 +116,9 @@ class CardController extends Controller
             'card_img' => 'nullable| image | mimes:jpeg,jpg,png,gif | max:2048'
         ]);
 
-        $validatedData['user_id'] = 70;
+        $user_data = Auth::user();
+
+        $validatedData['user_id'] = $user_data->id;
 
 
         if ($request->hasFile('card_img')) {
@@ -118,13 +127,12 @@ class CardController extends Controller
 
             if (Storage::disk('public')->exists($oldImagePath)) {
                 Log::info('La imagen existe en el disco "public" y se procederá a eliminarla: ' . $oldImagePath);
-                Storage::disk('public')->delete($oldImagePath); // Elimina la imagen en el disco 'public'
+                Storage::disk('public')->delete($oldImagePath);
                 Log::info('La imagen ha sido eliminada correctamente: ' . $oldImagePath);
             } else {
                 Log::warning("No se encontró la imagen antigua en el disco 'public': " . $oldImagePath);
             }
 
-            // Guarda la nueva imagen
             $path = $request->file('card_img')->store('cards', 'public');
             $validatedData["card_img"] = $path;
         }
@@ -152,6 +160,8 @@ class CardController extends Controller
      */
     public function destroy(Card $card): RedirectResponse
     {
+        $this->authorize('delete', $card);
+
         if ($card->card_img) {
             Storage::disk('public')->delete($card->card_img);
         }

@@ -14,9 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->delete();
         DB::table('card_listings')->truncate();
+        DB::table('users')->delete();
 
+        $this->call(TestUserSeeder::class);
         $this->call(RandomUserSeeder::class);
         $this->call(CardSeeder::class);
     }

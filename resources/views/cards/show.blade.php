@@ -3,6 +3,7 @@
     <div class="border shadow-lg text-black flex-col">
         <div class="buttons flex justify-between items-center">
             <a class="p-4" href="{{url('/cards')}}"><i class="fa-solid fa-arrow-left"></i> Back to list cards</a>
+            @can('update', $card)
             <div class="buttons-right flex gap-4">
                 <x-buttonlink bg="bg-blue-500" url="{{route('cards.edit', $card->id)}}">Edit</x-buttonlink>
                 <form method="POST" action="{{route('cards.destroy', $card->id)}}"
@@ -12,6 +13,7 @@
                     <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-sm	 " type="submit">Delete</button>
                 </form>
             </div>
+            @endcan
         </div>
         <div class="primary-info flex ">
             <div class="img">
