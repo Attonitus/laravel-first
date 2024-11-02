@@ -18,8 +18,7 @@ class CardController extends Controller
      */
     public function index(): View
     {
-        $value = session()->get('late');
-        dd($value);
+
         $cards = Card::all();
         return view("cards.index")->with('cards', $cards);
     }
