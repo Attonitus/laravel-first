@@ -12,6 +12,17 @@
             <x-navlink url="/dashboard" :active="request()->is('cards/saved')" icon="gauge">Dashboard</x-navlink>
             <x-logout-component />
             <x-buttonlink icon="edit" url="/cards/create">Create Card</x-buttonlink>
+            <div>
+                <a href="{{route('dashboard')}}">
+                    @if(Auth::user()->avatar)
+                        <img src="{{asset('storage/'.Auth::user()->avatar)}}" alt="{{Auth::user()->name}}"
+                        class="w-10 h-10 object-cover">
+                    @else
+                        <img src="{{asset('storage/avatars/avatar-default.png')}}" alt="Default image"
+                        class="w-10 h-10 object-cover">
+                    @endif
+                </a>
+            </div>
             @else
             <x-navlink url="/login" :active="request()->is('login')">Login</x-navlink>
             <x-navlink url="/register" :active="request()->is('register')" icon="user">Register</x-navlink>

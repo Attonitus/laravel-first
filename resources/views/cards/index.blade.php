@@ -7,4 +7,5 @@
             <h2>No hay cartas unu</h2>
         @endforelse
     </div>
+    {{$cards->links()}}
 </x-layout>

@@ -22,7 +22,7 @@ class CardController extends Controller
     public function index(): View
     {
 
-        $cards = Card::all();
+        $cards = Card::paginate(2);
         return view("cards.index")->with('cards', $cards);
     }
 
@@ -167,6 +167,11 @@ class CardController extends Controller
         }
 
         $card->delete();
+
+        if (request()->query('from') == 'dashboard') {
+            return redirect()->route('dashboard');
+        }
+
         return redirect()->route('cards.index');
     }
 }
