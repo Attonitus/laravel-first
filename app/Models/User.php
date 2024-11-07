@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -52,5 +53,10 @@ class User extends Authenticatable
     public function cardListings(): HasMany
     {
         return $this->hasMany(Card::class);
+    }
+
+    public function bookmarkedCard(): BelongsToMany
+    {
+        return $this->belongsToMany(Card::class, 'card_user_bookmarks')->withTimestamps();
     }
 }

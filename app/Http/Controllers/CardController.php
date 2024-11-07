@@ -22,7 +22,7 @@ class CardController extends Controller
     public function index(): View
     {
 
-        $cards = Card::paginate(2);
+        $cards = Card::latest()->paginate(5);
         return view("cards.index")->with('cards', $cards);
     }
 
@@ -173,5 +173,22 @@ class CardController extends Controller
         }
 
         return redirect()->route('cards.index');
+    }
+
+    public function search(Request $request): View
+    {
+        $keywords = strtolower($request->input('keywords'));
+
+        $query = Card::query();
+
+        if ($keywords) {
+            $query->where(function ($q) use ($keywords) {
+                $q->whereRaw('LOWER(name) like ?', ['%' . $keywords . '%'])
+                    ->orWhereRaw('LOWER(type) like ?', ['%' . $keywords . '%']);
+            });
+        }
+
+        $cards = $query->paginate(10);
+        return view('cards.index')->with('cards', $cards);
     }
 }

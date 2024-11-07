@@ -8,7 +8,7 @@
         <nav class="hidden lg:flex items-center space-x-4">
             <x-navlink url="/cards" :active="request()->is('cards')">All cards</x-navlink>
             @auth
-            <x-navlink url="/cards/saved" :active="request()->is('cards/saved')">Saved cards</x-navlink>
+            <x-navlink url="/bookmarks" :active="request()->is('bookmarks')">Saved cards</x-navlink>
             <x-navlink url="/dashboard" :active="request()->is('cards/saved')" icon="gauge">Dashboard</x-navlink>
             <x-logout-component />
             <x-buttonlink icon="edit" url="/cards/create">Create Card</x-buttonlink>
@@ -38,7 +38,7 @@
     <nav id="mobile-menu" class="lx:hidden hidden bg-gray-700 text-white mt-5 pb-4 space-y-2">
         <x-navlink url="/cards" mobile="true" :active="request()->is('cards')">All cards</x-navlink>
         @auth
-        <x-navlink url="/cards/saved" mobile="true" :active="request()->is('cards/saved')">Saved Cards</x-navlink>
+        <x-navlink url="/bookmarks" mobile="true" :active="request()->is('bookmarks')">Saved Cards</x-navlink>
         <x-navlink url="/dashboard" mobile="true" icon="gauge" :active="request()->is('dashboard')">Dashboard</x-navlink>
         <x-logout-component />
         <x-buttonlink icon="edit" block="block" url="/cards/create">Create Job</x-buttonlink>

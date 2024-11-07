@@ -1,6 +1,6 @@
 
 <x-layout>
-    <x-slot name="title">Cartas, for everyone in everywhere</x-slot>
+    <x-slot name="title">Cards, for everyone in everywhere</x-slot>
 
     <section class="mt-4">
         <div class="trends-up bg-slate-900 flex justify-items-center p-4 justify-between m-4">

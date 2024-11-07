@@ -7,10 +7,10 @@
             <div class="buttons-right flex gap-4">
                 <x-buttonlink bg="bg-blue-500" url="{{route('cards.edit', $card->id)}}">Edit</x-buttonlink>
                 <form method="POST" action="{{route('cards.destroy', $card->id)}}"
-                    onsubmit="return confirm('Aree u sure that u want to delete this card?')" >
+                    onsubmit="return confirm('Are u sure that u want to delete this card?')" >
                     @csrf
                     @method('DELETE')
-                    <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-sm	 " type="submit">Delete</button>
+                    <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-sm " type="submit">Delete</button>
                 </form>
             </div>
             @endcan
@@ -25,8 +25,20 @@
 
                 <div class="flex gap-4">
                     <p class="p-2 px-12 bg-green-600 text-xl text-white font-bold">${{$card->value}}</p>
-                    <a href="{{url('/cards/saved')}}"><button class="bg-pink-400 px-6 font-bold  text-white p-2"><i class="fa-solid fa-heart"></i> Save</button></a>
+                    @guest
+                        <p  class="bg-gray-400 px-6 font-bold  text-white p-2"><i class="fas fa-info-circle"></i> You must be loggin to save a card</p>
+                        @else
+                        <form action="{{ auth()->user()->bookmarkedCard()->where('card_id', $card->id)->exists() ? route('bookmarks.destroy', $card->id) : route('bookmarks.store', $card->id)}}" method="POST">
+                            @csrf
+                            @if( auth()->user()->bookmarkedCard()->where('card_id', $card->id)->exists() )
+                                @method('DELETE')
+                                <button class="bg-red-400 px-6 font-bold  text-white p-2" type="submit"><i class="fa-solid fa-heart"></i> Remove save</button>
 
+                            @else
+                                <button class="bg-pink-400 px-6 font-bold  text-white p-2" type="submit"><i class="fa-solid fa-heart"></i> Save</button>
+                            @endif
+                        </form>
+                    @endguest
                 </div>
             </div>
         </div>
